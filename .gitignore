@@ -4,6 +4,7 @@
 *.xcuserdatad
 xcuserdata
 Build
+DerivedData
 Index
 bin
 .DS_Store
