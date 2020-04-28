@@ -41,6 +41,74 @@ void DisplayReconfigurationCallback(CGDirectDisplayID cg_id,
 
 
 
+// Returns the io_service_t (an int) corresponding to a CG display ID, or 0 on failure.
+// The io_service_t should be released with IOObjectRelease when not needed.
+
+- (io_service_t) IOServicePortFromCGDisplayID: (CGDirectDisplayID) displayID
+{
+    io_iterator_t iter;
+    io_service_t serv, servicePort = 0;
+
+    CFMutableDictionaryRef matching = IOServiceMatching("IODisplayConnect");
+
+    // releases matching for us
+    kern_return_t err = IOServiceGetMatchingServices( kIOMasterPortDefault, matching, & iter );
+    if ( err )
+        return 0;
+
+    while ( (serv = IOIteratorNext(iter)) != 0 )
+    {
+        CFDictionaryRef displayInfo;
+        CFNumberRef vendorIDRef;
+        CFNumberRef productIDRef;
+        CFNumberRef serialNumberRef;
+
+        displayInfo = IODisplayCreateInfoDictionary( serv, kIODisplayOnlyPreferredName );
+
+        Boolean success;
+        success =  CFDictionaryGetValueIfPresent( displayInfo, CFSTR(kDisplayVendorID),  (const void**) & vendorIDRef );
+        success &= CFDictionaryGetValueIfPresent( displayInfo, CFSTR(kDisplayProductID), (const void**) & productIDRef );
+
+        if ( !success )
+        {
+            CFRelease(displayInfo);
+            continue;
+        }
+
+        SInt32 vendorID;
+        CFNumberGetValue( vendorIDRef, kCFNumberSInt32Type, &vendorID );
+        SInt32 productID;
+        CFNumberGetValue( productIDRef, kCFNumberSInt32Type, &productID );
+
+        // If a serial number is found, use it.
+        // Otherwise serial number will be nil (= 0) which will match with the output of 'CGDisplaySerialNumber'
+        SInt32 serialNumber = 0;
+        if ( CFDictionaryGetValueIfPresent(displayInfo, CFSTR(kDisplaySerialNumber), (const void**) & serialNumberRef) )
+        {
+            CFNumberGetValue( serialNumberRef, kCFNumberSInt32Type, &serialNumber );
+        }
+
+        // If the vendor and product id along with the serial don't match
+        // then we are not looking at the correct monitor.
+        // NOTE: The serial number is important in cases where two monitors
+        //       are the exact same.
+        if( CGDisplayVendorNumber(displayID) != vendorID ||
+            CGDisplayModelNumber(displayID)  != productID ||
+            CGDisplaySerialNumber(displayID) != serialNumber )
+        {
+            CFRelease(displayInfo);
+            continue;
+        }
+
+        servicePort = serv;
+        CFRelease(displayInfo);
+        break;
+    }
+
+    IOObjectRelease(iter);
+    return servicePort;
+}
+
 - (void) refreshStatusMenu
 {
 	
@@ -135,7 +203,7 @@ void DisplayReconfigurationCallback(CGDirectDisplayID cg_id,
 			}
 			
 			NSString *screenName = @"";
-			NSDictionary *deviceInfo = (__bridge NSDictionary *)IODisplayCreateInfoDictionary(CGDisplayIOServicePort(display), kIODisplayOnlyPreferredName);
+			NSDictionary *deviceInfo = (__bridge NSDictionary *)IODisplayCreateInfoDictionary([self IOServicePortFromCGDisplayID:display], kIODisplayOnlyPreferredName);
 			NSDictionary *localizedNames = [deviceInfo objectForKey:[NSString stringWithUTF8String:kDisplayProductName]];
 			if ([localizedNames count] > 0) {
 				screenName = [localizedNames objectForKey:[[localizedNames allKeys] objectAtIndex:0]];
