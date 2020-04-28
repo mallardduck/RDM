@@ -11,7 +11,6 @@ int cmdline_main(int argc, const char * argv[])
 {
 	//exit(0);
 	
-	NSAutoreleasePool* pool = [NSAutoreleasePool new];
  	{
 		int width = 0;
 		int height = 0;
@@ -301,6 +300,5 @@ int cmdline_main(int argc, const char * argv[])
 		
 		
     }
-	[pool release];
     return 0;
 }

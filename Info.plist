@@ -2,29 +2,35 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIconFile</key>
-	<string>monitor</string>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleExecutable</key>
-	<string>SetResX</string>
-	<key>CFBundleGetInfoString</key>
-	<string>Rapid screen resolution switching</string>
-	<key>CFBundleIdentifier</key>
-	<string>net.alkalay.RDM</string>
-	<key>CFBundleName</key>
-	<string>RDM</string>
-	<key>LSUIElement</key>
+	<key>CFBundleShortVersionString</key>
+	<string>2.3.2</string>
+	<key>CFBundleVersion</key>
 	<string>1</string>
-	<key>NSHighResolutionCapable</key>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.utilities</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+	<key>LSUIElement</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
 	<string>Distributed under GNU General Public License v3.0</string>
-	<key>CFBundleVersion</key>
-	<string>2.2</string>
-	<key>CFBundleShortVersionString</key>
-	<string>2.2</string>
+	<key>NSMainStoryboardFile</key>
+	<string>Main</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
 </dict>
 </plist>

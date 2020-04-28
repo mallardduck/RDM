@@ -1,0 +1,9 @@
+*.swp
+*.o
+*.app
+*.xcuserdatad
+xcuserdata
+Build
+Index
+bin
+.DS_Store

@@ -15,7 +15,7 @@ int main(int argc, const char* argv[])
 		ret = cmdline_main(argc, argv);
 	}
 	
-	if(ret == -1)
+//	if(ret == -1)
 	{
 		fprintf(stderr, "Commandline options\n"
 						"  --width    (-w)  Width\n"
@@ -27,15 +27,12 @@ int main(int argc, const char* argv[])
 						"  --modes    (-lm) List available modes\n"
 						"\nCurrently running GUI.  Use ^C or close from menu\n");
 		
-		NSAutoreleasePool* pool = [NSAutoreleasePool new];
 		NSApplication* app = [NSApplication sharedApplication];
 
 		[app setDelegate: [SRApplicationDelegate new]];
 
 		//NSApplication* app = [SRApplication sharedApplication];
 		[app performSelectorOnMainThread: @selector(run) withObject: nil waitUntilDone: YES];
-
-		[pool release];
 	}
 	
 	
