@@ -127,6 +127,7 @@
 				TargetAttributes = {
 					35C9D3AA212C04DA00D652F7 = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1140;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Sandbox = {
@@ -324,7 +325,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = bridging.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -347,7 +348,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = bridging.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
