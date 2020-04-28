@@ -109,11 +109,12 @@ import Cocoa
 	func swapUInt32Data(data : Data) -> Data {
 		var mdata = data // make a mutable copy
 		let count = data.count / MemoryLayout<UInt32>.size
-		mdata.withUnsafeMutableBytes { (i32ptr: UnsafeMutablePointer<UInt32>) in
-			for i in 0..<count {
-				i32ptr[i] = i32ptr[i].byteSwapped
-			}
-		}
+        mdata.withUnsafeMutableBytes { (rawMutableBufferPointer) in
+            let bufferPointer = rawMutableBufferPointer.bindMemory(to: UInt32.self)
+            for i in 0..<count {
+                bufferPointer[i] = bufferPointer[i].byteSwapped
+            }
+        }
 		return mdata
 	}
 	
@@ -137,11 +138,11 @@ import Cocoa
 		let resArray = resolutions.map { (r : Resolution) -> NSData in
 			var d = Data()
 			var w : UInt32 = r.width, h : UInt32 = r.height
-			d.append(UnsafeBufferPointer(start: &w, count: 1))
-			d.append(UnsafeBufferPointer(start: &h, count: 1))
+            withUnsafePointer(to: &w) { d.append(UnsafeBufferPointer(start: $0, count: 1)) }
+            withUnsafePointer(to: &h) { d.append(UnsafeBufferPointer(start: $0, count: 1)) }
 			if r.hiDPI {
 				var hiDPIFlag : [UInt32] = [0x1, 0x200000]
-				d.append(UnsafeBufferPointer(start: &hiDPIFlag, count: 2))
+                withUnsafePointer(to: &hiDPIFlag) { d.append(UnsafeBufferPointer(start: $0, count: 2)) }
 			}
 			return swapUInt32Data(data: d) as NSData
 		} as NSArray
